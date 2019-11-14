@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Asignacion.Models
 {
-    public class TipoDocumentoMap : IEntityTypeConfiguration<TipoDocumento>
+    public class SedeMap : IEntityTypeConfiguration<Sede>
     {
-        public void Configure(EntityTypeBuilder<TipoDocumento> builder)
+        public void Configure(EntityTypeBuilder<Sede> builder)
         {
-            builder.ToTable("TipoDocumento")
-               .HasKey(c => c.idtipodocumento);
+            builder.ToTable("Sede")
+               .HasKey(c => c.idsede);
             builder.Property(c => c.descripcion)
                 .HasMaxLength(50);
         }
