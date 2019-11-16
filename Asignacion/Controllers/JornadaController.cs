@@ -22,7 +22,7 @@ namespace Asignacion.Controllers
         // GET: Jornada
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Jornada.ToListAsync());
+            return View(await _context.Jornadas.ToListAsync());
         }
 
         // GET: Jornada/Details/5
@@ -33,7 +33,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var jornada = await _context.Jornada
+            var jornada = await _context.Jornadas
                 .FirstOrDefaultAsync(m => m.idjornada == id);
             if (jornada == null)
             {
@@ -73,7 +73,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var jornada = await _context.Jornada.FindAsync(id);
+            var jornada = await _context.Jornadas.FindAsync(id);
             if (jornada == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var jornada = await _context.Jornada
+            var jornada = await _context.Jornadas
                 .FirstOrDefaultAsync(m => m.idjornada == id);
             if (jornada == null)
             {
@@ -139,15 +139,15 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var jornada = await _context.Jornada.FindAsync(id);
-            _context.Jornada.Remove(jornada);
+            var jornada = await _context.Jornadas.FindAsync(id);
+            _context.Jornadas.Remove(jornada);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool JornadaExists(int id)
         {
-            return _context.Jornada.Any(e => e.idjornada == id);
+            return _context.Jornadas.Any(e => e.idjornada == id);
         }
     }
 }

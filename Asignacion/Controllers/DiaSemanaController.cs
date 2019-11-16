@@ -22,7 +22,7 @@ namespace Asignacion.Controllers
         // GET: DiaSemana
         public async Task<IActionResult> Index()
         {
-            return View(await _context.DiaSemana.ToListAsync());
+            return View(await _context.DiaSemanas.ToListAsync());
         }
 
         // GET: DiaSemana/Details/5
@@ -33,7 +33,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var diaSemana = await _context.DiaSemana
+            var diaSemana = await _context.DiaSemanas
                 .FirstOrDefaultAsync(m => m.iddiasemana == id);
             if (diaSemana == null)
             {
@@ -73,7 +73,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var diaSemana = await _context.DiaSemana.FindAsync(id);
+            var diaSemana = await _context.DiaSemanas.FindAsync(id);
             if (diaSemana == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var diaSemana = await _context.DiaSemana
+            var diaSemana = await _context.DiaSemanas
                 .FirstOrDefaultAsync(m => m.iddiasemana == id);
             if (diaSemana == null)
             {
@@ -139,15 +139,15 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var diaSemana = await _context.DiaSemana.FindAsync(id);
-            _context.DiaSemana.Remove(diaSemana);
+            var diaSemana = await _context.DiaSemanas.FindAsync(id);
+            _context.DiaSemanas.Remove(diaSemana);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DiaSemanaExists(int id)
         {
-            return _context.DiaSemana.Any(e => e.iddiasemana == id);
+            return _context.DiaSemanas.Any(e => e.iddiasemana == id);
         }
     }
 }

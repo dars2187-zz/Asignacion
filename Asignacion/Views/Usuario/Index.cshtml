@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Asignacion.Entidades.Usuario>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Crear Nuevo Usuario</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.numdocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.correo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.clave)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.estado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.idrol)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.idtipodocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.idprograma)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.numdocumento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.correo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.telefono)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.clave)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.estado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.idrol)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.idtipodocumento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.idprograma)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.idusuario">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.idusuario">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.idusuario">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

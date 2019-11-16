@@ -22,7 +22,7 @@ namespace Asignacion.Controllers
         // GET: Facultad
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Facultad.ToListAsync());
+            return View(await _context.Facultades.ToListAsync());
         }
 
         // GET: Facultad/Details/5
@@ -33,7 +33,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var facultad = await _context.Facultad
+            var facultad = await _context.Facultades
                 .FirstOrDefaultAsync(m => m.idfacultad == id);
             if (facultad == null)
             {
@@ -73,7 +73,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var facultad = await _context.Facultad.FindAsync(id);
+            var facultad = await _context.Facultades.FindAsync(id);
             if (facultad == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var facultad = await _context.Facultad
+            var facultad = await _context.Facultades
                 .FirstOrDefaultAsync(m => m.idfacultad == id);
             if (facultad == null)
             {
@@ -139,15 +139,15 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var facultad = await _context.Facultad.FindAsync(id);
-            _context.Facultad.Remove(facultad);
+            var facultad = await _context.Facultades.FindAsync(id);
+            _context.Facultades.Remove(facultad);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FacultadExists(int id)
         {
-            return _context.Facultad.Any(e => e.idfacultad == id);
+            return _context.Facultades.Any(e => e.idfacultad == id);
         }
     }
 }

@@ -1,0 +1,76 @@
+﻿@model Asignacion.Entidades.Usuario
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Usuario</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="idusuario" />
+            <div class="form-group">
+                <label asp-for="numdocumento" class="control-label"></label>
+                <input asp-for="numdocumento" class="form-control" />
+                <span asp-validation-for="numdocumento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="nombre" class="control-label"></label>
+                <input asp-for="nombre" class="form-control" />
+                <span asp-validation-for="nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="apellido" class="control-label"></label>
+                <input asp-for="apellido" class="form-control" />
+                <span asp-validation-for="apellido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="correo" class="control-label"></label>
+                <input asp-for="correo" class="form-control" />
+                <span asp-validation-for="correo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="telefono" class="control-label"></label>
+                <input asp-for="telefono" class="form-control" />
+                <span asp-validation-for="telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="clave" class="control-label"></label>
+                <input asp-for="clave" class="form-control" />
+                <span asp-validation-for="clave" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="estado" /> @Html.DisplayNameFor(model => model.estado)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="idrol" class="control-label"></label>
+                <input asp-for="idrol" class="form-control" />
+                <span asp-validation-for="idrol" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="idtipodocumento" class="control-label"></label>
+                <input asp-for="idtipodocumento" class="form-control" />
+                <span asp-validation-for="idtipodocumento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="idprograma" class="control-label"></label>
+                <input asp-for="idprograma" class="form-control" />
+                <span asp-validation-for="idprograma" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

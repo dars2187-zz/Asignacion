@@ -1,0 +1,30 @@
+﻿@model Asignacion.Entidades.GrupoAula
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>GrupoAula</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.grupo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.grupo.descripcion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.aula)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.aula.numaula)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

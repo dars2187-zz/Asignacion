@@ -22,7 +22,7 @@ namespace Asignacion.Controllers
         // GET: Sede
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sede.ToListAsync());
+            return View(await _context.Sedes.ToListAsync());
         }
 
         // GET: Sede/Details/5
@@ -33,7 +33,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var sede = await _context.Sede
+            var sede = await _context.Sedes
                 .FirstOrDefaultAsync(m => m.idsede == id);
             if (sede == null)
             {
@@ -73,7 +73,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var sede = await _context.Sede.FindAsync(id);
+            var sede = await _context.Sedes.FindAsync(id);
             if (sede == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var sede = await _context.Sede
+            var sede = await _context.Sedes
                 .FirstOrDefaultAsync(m => m.idsede == id);
             if (sede == null)
             {
@@ -139,15 +139,15 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var sede = await _context.Sede.FindAsync(id);
-            _context.Sede.Remove(sede);
+            var sede = await _context.Sedes.FindAsync(id);
+            _context.Sedes.Remove(sede);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SedeExists(int id)
         {
-            return _context.Sede.Any(e => e.idsede == id);
+            return _context.Sedes.Any(e => e.idsede == id);
         }
     }
 }

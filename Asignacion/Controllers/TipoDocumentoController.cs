@@ -22,7 +22,7 @@ namespace Asignacion.Controllers
         // GET: TipoDocumento
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TipoDocumento.ToListAsync());
+            return View(await _context.TipoDocumentos.ToListAsync());
         }
 
         // GET: TipoDocumento/Details/5
@@ -33,7 +33,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var tipoDocumento = await _context.TipoDocumento
+            var tipoDocumento = await _context.TipoDocumentos
                 .FirstOrDefaultAsync(m => m.idtipodocumento == id);
             if (tipoDocumento == null)
             {
@@ -73,7 +73,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var tipoDocumento = await _context.TipoDocumento.FindAsync(id);
+            var tipoDocumento = await _context.TipoDocumentos.FindAsync(id);
             if (tipoDocumento == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace Asignacion.Controllers
                 return NotFound();
             }
 
-            var tipoDocumento = await _context.TipoDocumento
+            var tipoDocumento = await _context.TipoDocumentos
                 .FirstOrDefaultAsync(m => m.idtipodocumento == id);
             if (tipoDocumento == null)
             {
@@ -139,15 +139,15 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tipoDocumento = await _context.TipoDocumento.FindAsync(id);
-            _context.TipoDocumento.Remove(tipoDocumento);
+            var tipoDocumento = await _context.TipoDocumentos.FindAsync(id);
+            _context.TipoDocumentos.Remove(tipoDocumento);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TipoDocumentoExists(int id)
         {
-            return _context.TipoDocumento.Any(e => e.idtipodocumento == id);
+            return _context.TipoDocumentos.Any(e => e.idtipodocumento == id);
         }
     }
 }
