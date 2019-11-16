@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Asignacion.Entidades;
+using Asignacion.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Asignacion.Entidades;
-using Asignacion.Models;
 
 namespace Asignacion.Controllers
 {
@@ -22,31 +20,47 @@ namespace Asignacion.Controllers
         // GET: Asignatura
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Asignaturas.ToListAsync());
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+                return View(await _context.Asignaturas.ToListAsync());
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Asignatura/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var asignatura = await _context.Asignaturas
-                .FirstOrDefaultAsync(m => m.idasignatura == id);
-            if (asignatura == null)
-            {
-                return NotFound();
-            }
+                var asignatura = await _context.Asignaturas
+                    .FirstOrDefaultAsync(m => m.idasignatura == id);
+                if (asignatura == null)
+                {
+                    return NotFound();
+                }
 
-            return View(asignatura);
+                return View(asignatura);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Asignatura/Create
         public IActionResult Create()
         {
-            return View();
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+                return View();
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Asignatura/Create
@@ -56,29 +70,41 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idasignatura,descripcion,credito,idmodalidad")] Asignatura asignatura)
         {
-            if (ModelState.IsValid)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                _context.Add(asignatura);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(asignatura);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(asignatura);
             }
-            return View(asignatura);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Asignatura/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var asignatura = await _context.Asignaturas.FindAsync(id);
-            if (asignatura == null)
-            {
-                return NotFound();
+                var asignatura = await _context.Asignaturas.FindAsync(id);
+                if (asignatura == null)
+                {
+                    return NotFound();
+                }
+                return View(asignatura);
             }
-            return View(asignatura);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Asignatura/Edit/5
@@ -88,50 +114,62 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idasignatura,descripcion,credito,idmodalidad")] Asignatura asignatura)
         {
-            if (id != asignatura.idasignatura)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id != asignatura.idasignatura)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(asignatura);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AsignaturaExists(asignatura.idasignatura))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(asignatura);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!AsignaturaExists(asignatura.idasignatura))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(asignatura);
             }
-            return View(asignatura);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Asignatura/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var asignatura = await _context.Asignaturas
-                .FirstOrDefaultAsync(m => m.idasignatura == id);
-            if (asignatura == null)
-            {
-                return NotFound();
-            }
+                var asignatura = await _context.Asignaturas
+                    .FirstOrDefaultAsync(m => m.idasignatura == id);
+                if (asignatura == null)
+                {
+                    return NotFound();
+                }
 
-            return View(asignatura);
+                return View(asignatura);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Asignatura/Delete/5
@@ -139,10 +177,16 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var asignatura = await _context.Asignaturas.FindAsync(id);
-            _context.Asignaturas.Remove(asignatura);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+            {
+                var asignatura = await _context.Asignaturas.FindAsync(id);
+                _context.Asignaturas.Remove(asignatura);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         private bool AsignaturaExists(int id)

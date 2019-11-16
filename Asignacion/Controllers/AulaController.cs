@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Asignacion.Entidades;
+using Asignacion.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Asignacion.Entidades;
-using Asignacion.Models;
 
 namespace Asignacion.Controllers
 {
@@ -22,31 +20,47 @@ namespace Asignacion.Controllers
         // GET: Aula
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Aulas.ToListAsync());
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+                return View(await _context.Aulas.ToListAsync());
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Aula/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var aula = await _context.Aulas
-                .FirstOrDefaultAsync(m => m.idaula == id);
-            if (aula == null)
-            {
-                return NotFound();
-            }
+                var aula = await _context.Aulas
+                    .FirstOrDefaultAsync(m => m.idaula == id);
+                if (aula == null)
+                {
+                    return NotFound();
+                }
 
-            return View(aula);
+                return View(aula);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Aula/Create
         public IActionResult Create()
         {
-            return View();
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+                return View();
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Aula/Create
@@ -56,29 +70,41 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idaula,numaula,idsede")] Aula aula)
         {
-            if (ModelState.IsValid)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                _context.Add(aula);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(aula);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(aula);
             }
-            return View(aula);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Aula/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var aula = await _context.Aulas.FindAsync(id);
-            if (aula == null)
-            {
-                return NotFound();
+                var aula = await _context.Aulas.FindAsync(id);
+                if (aula == null)
+                {
+                    return NotFound();
+                }
+                return View(aula);
             }
-            return View(aula);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Aula/Edit/5
@@ -88,50 +114,62 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idaula,numaula,idsede")] Aula aula)
         {
-            if (id != aula.idaula)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id != aula.idaula)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(aula);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AulaExists(aula.idaula))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(aula);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!AulaExists(aula.idaula))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(aula);
             }
-            return View(aula);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Aula/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var aula = await _context.Aulas
-                .FirstOrDefaultAsync(m => m.idaula == id);
-            if (aula == null)
-            {
-                return NotFound();
-            }
+                var aula = await _context.Aulas
+                    .FirstOrDefaultAsync(m => m.idaula == id);
+                if (aula == null)
+                {
+                    return NotFound();
+                }
 
-            return View(aula);
+                return View(aula);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Aula/Delete/5
@@ -139,10 +177,16 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var aula = await _context.Aulas.FindAsync(id);
-            _context.Aulas.Remove(aula);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+            {
+                var aula = await _context.Aulas.FindAsync(id);
+                _context.Aulas.Remove(aula);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         private bool AulaExists(int id)

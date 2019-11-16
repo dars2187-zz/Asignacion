@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Asignacion.Entidades;
+using Asignacion.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Asignacion.Entidades;
-using Asignacion.Models;
 
 namespace Asignacion.Controllers
 {
@@ -22,31 +20,47 @@ namespace Asignacion.Controllers
         // GET: DiaSemana
         public async Task<IActionResult> Index()
         {
-            return View(await _context.DiaSemanas.ToListAsync());
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+                return View(await _context.DiaSemanas.ToListAsync());
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: DiaSemana/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var diaSemana = await _context.DiaSemanas
-                .FirstOrDefaultAsync(m => m.iddiasemana == id);
-            if (diaSemana == null)
-            {
-                return NotFound();
-            }
+                var diaSemana = await _context.DiaSemanas
+                    .FirstOrDefaultAsync(m => m.iddiasemana == id);
+                if (diaSemana == null)
+                {
+                    return NotFound();
+                }
 
-            return View(diaSemana);
+                return View(diaSemana);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: DiaSemana/Create
         public IActionResult Create()
         {
-            return View();
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+                return View();
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: DiaSemana/Create
@@ -56,29 +70,41 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("iddiasemana,descripcion")] DiaSemana diaSemana)
         {
-            if (ModelState.IsValid)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                _context.Add(diaSemana);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(diaSemana);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(diaSemana);
             }
-            return View(diaSemana);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: DiaSemana/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var diaSemana = await _context.DiaSemanas.FindAsync(id);
-            if (diaSemana == null)
-            {
-                return NotFound();
+                var diaSemana = await _context.DiaSemanas.FindAsync(id);
+                if (diaSemana == null)
+                {
+                    return NotFound();
+                }
+                return View(diaSemana);
             }
-            return View(diaSemana);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: DiaSemana/Edit/5
@@ -88,50 +114,62 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("iddiasemana,descripcion")] DiaSemana diaSemana)
         {
-            if (id != diaSemana.iddiasemana)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id != diaSemana.iddiasemana)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(diaSemana);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DiaSemanaExists(diaSemana.iddiasemana))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(diaSemana);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!DiaSemanaExists(diaSemana.iddiasemana))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(diaSemana);
             }
-            return View(diaSemana);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: DiaSemana/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var diaSemana = await _context.DiaSemanas
-                .FirstOrDefaultAsync(m => m.iddiasemana == id);
-            if (diaSemana == null)
-            {
-                return NotFound();
-            }
+                var diaSemana = await _context.DiaSemanas
+                    .FirstOrDefaultAsync(m => m.iddiasemana == id);
+                if (diaSemana == null)
+                {
+                    return NotFound();
+                }
 
-            return View(diaSemana);
+                return View(diaSemana);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: DiaSemana/Delete/5
@@ -139,10 +177,16 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var diaSemana = await _context.DiaSemanas.FindAsync(id);
-            _context.DiaSemanas.Remove(diaSemana);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+            {
+                var diaSemana = await _context.DiaSemanas.FindAsync(id);
+                _context.DiaSemanas.Remove(diaSemana);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         private bool DiaSemanaExists(int id)

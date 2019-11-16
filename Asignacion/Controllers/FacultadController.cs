@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Asignacion.Entidades;
+using Asignacion.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Asignacion.Entidades;
-using Asignacion.Models;
 
 namespace Asignacion.Controllers
 {
@@ -22,31 +20,47 @@ namespace Asignacion.Controllers
         // GET: Facultad
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Facultades.ToListAsync());
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+                return View(await _context.Facultades.ToListAsync());
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Facultad/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var facultad = await _context.Facultades
-                .FirstOrDefaultAsync(m => m.idfacultad == id);
-            if (facultad == null)
-            {
-                return NotFound();
-            }
+                var facultad = await _context.Facultades
+                    .FirstOrDefaultAsync(m => m.idfacultad == id);
+                if (facultad == null)
+                {
+                    return NotFound();
+                }
 
-            return View(facultad);
+                return View(facultad);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Facultad/Create
         public IActionResult Create()
         {
-            return View();
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+                return View();
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Facultad/Create
@@ -56,29 +70,41 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idfacultad,descripcion")] Facultad facultad)
         {
-            if (ModelState.IsValid)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                _context.Add(facultad);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(facultad);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(facultad);
             }
-            return View(facultad);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Facultad/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var facultad = await _context.Facultades.FindAsync(id);
-            if (facultad == null)
-            {
-                return NotFound();
+                var facultad = await _context.Facultades.FindAsync(id);
+                if (facultad == null)
+                {
+                    return NotFound();
+                }
+                return View(facultad);
             }
-            return View(facultad);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Facultad/Edit/5
@@ -88,50 +114,62 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idfacultad,descripcion")] Facultad facultad)
         {
-            if (id != facultad.idfacultad)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id != facultad.idfacultad)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(facultad);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FacultadExists(facultad.idfacultad))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(facultad);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!FacultadExists(facultad.idfacultad))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(facultad);
             }
-            return View(facultad);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Facultad/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var facultad = await _context.Facultades
-                .FirstOrDefaultAsync(m => m.idfacultad == id);
-            if (facultad == null)
-            {
-                return NotFound();
-            }
+                var facultad = await _context.Facultades
+                    .FirstOrDefaultAsync(m => m.idfacultad == id);
+                if (facultad == null)
+                {
+                    return NotFound();
+                }
 
-            return View(facultad);
+                return View(facultad);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Facultad/Delete/5
@@ -139,10 +177,16 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var facultad = await _context.Facultades.FindAsync(id);
-            _context.Facultades.Remove(facultad);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var usu = HttpContext.Session.GetInt32("Usuario");
+            var perf = HttpContext.Session.GetInt32("Perfil");
+            if (usu == 1 && perf == 1)
+            {
+                var facultad = await _context.Facultades.FindAsync(id);
+                _context.Facultades.Remove(facultad);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         private bool FacultadExists(int id)
