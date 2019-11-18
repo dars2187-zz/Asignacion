@@ -10,6 +10,14 @@ namespace Asignacion.Models
         {
             builder.ToTable("Programa")
                .HasKey(c => c.idprograma);
+            builder.ToTable("Programa")
+               .HasOne(p => p.facultad)
+               .WithMany(b => b.programa)
+               .HasForeignKey(p => p.idfacultad);
+            builder.ToTable("Programa")
+               .HasOne(p => p.jornada)
+               .WithMany(b => b.programa)
+               .HasForeignKey(p => p.idjornada);
             builder.Property(c => c.descripcion)
                 .HasMaxLength(50);
         }

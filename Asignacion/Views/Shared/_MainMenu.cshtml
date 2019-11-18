@@ -1,33 +1,32 @@
-﻿<ul class="sidebar-menu" data-widget="tree">
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+<ul class="sidebar-menu" data-widget="tree">
     <li class="header">MENÚ</li>
-    <!-- Optionally, you can add icons to the links -->
-    <li><a href="~/Asignatura/Index"><i class="fa fa-link"></i> <span>Asignatura</span></a></li>
-    <li><a href="~/Aula/Index"><i class="fa fa-link"></i> <span>Aula</span></a></li>
-    <li><a href="~/DiaSemana/Index"><i class="fa fa-link"></i> <span>Días de la semana</span></a></li>
-    <li><a href="~/Facultad/Index"><i class="fa fa-link"></i> <span>Facultad</span></a></li>
-    <li><a href="~/Grupo/Index"><i class="fa fa-link"></i> <span>Grupo</span></a></li>
-    <li><a href="~/GrupoAula/Index"><i class="fa fa-link"></i> <span>Grupo Aula</span></a></li>
-    <li><a href="~/Horario/Index"><i class="fa fa-link"></i> <span>Horario</span></a></li>
-    <li><a href="~/Jornada/Index"><i class="fa fa-link"></i> <span>Jornada</span></a></li>
-    <li><a href="~/Modalidad/Index"><i class="fa fa-link"></i> <span>Modalidad</span></a></li>
-    <li><a href="~/Parametro/Index"><i class="fa fa-link"></i> <span>Parametros</span></a></li>
-    <li><a href="~/Programa/Index"><i class="fa fa-link"></i> <span>Programa</span></a></li>
-    <li><a href="~/ProgramaAsignatura/Index"><i class="fa fa-link"></i> <span>Programa Asignatura</span></a></li>
-    <li><a href="~/Rol/Index"><i class="fa fa-link"></i> <span>Rol</span></a></li>
-    <li><a href="~/Sede/Index"><i class="fa fa-link"></i> <span>Sede</span></a></li>
-    <li><a href="~/TipoDocumento/Index"><i class="fa fa-link"></i> <span>Tipo de Documento</span></a></li>
-    <li><a href="~/Usuario/Index"><i class="fa fa-link"></i> <span>Usuario</span></a></li>
-    @*<li class="treeview">
-            <a href="#">
-                <i class="fa fa-link"></i> <span>Multilevel</span>
-                <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                </span>
-            </a>
-            <ul class="treeview-menu">
-                <li><a href="#">Link in level 2</a></li>
-                <li><a href="#">Link in level 2</a></li>
-            </ul>
-        </li>*@
+    @if (@HttpContextAccessor.HttpContext.Session.GetInt32("Perfil") == 1)
+    {
+        <!-- Optionally, you can add icons to the links -->
+        <li><a href="~/Asignatura/Index"><i class="fa fa-address-book"></i> <span>Asignatura</span></a></li>
+        <li><a href="~/Aula/Index"><i class="fa fa-home"></i> <span>Aula</span></a></li>
+        <li><a href="~/DiaSemana/Index"><i class="fa fa-calendar"></i> <span>Días de la semana</span></a></li>
+        <li><a href="~/Facultad/Index"><i class="fa fa-institution"></i> <span>Facultad</span></a></li>
+        <li><a href="~/Grupo/Index"><i class="fa fa-group"></i> <span>Grupo</span></a></li>
+        <li><a href="~/GrupoAula/Index"><i class="fa fa-group"></i> <span>Grupo Aula</span></a></li>
+        <li><a href="~/Horario/Index"><i class="fa fa-calendar-minus-o"></i> <span>Horario</span></a></li>
+        <li><a href="~/Jornada/Index"><i class="fa fa-calendar-times-o"></i> <span>Jornada</span></a></li>
+        <li><a href="~/Modalidad/Index"><i class="fa fa-desktop"></i> <span>Modalidad</span></a></li>
+        <li><a href="~/Parametro/Index"><i class="fa fa-pencil"></i> <span>Parametros</span></a></li>
+        <li><a href="~/Programa/Index"><i class="fa fa-book"></i> <span>Programa</span></a></li>
+        <li><a href="~/ProgramaAsignatura/Index"><i class="fa fa-bookmark"></i> <span>Programa Asignatura</span></a></li>
+        <li><a href="~/Rol/Index"><i class="fa fa-user-circle"></i> <span>Rol</span></a></li>
+        <li><a href="~/Sede/Index"><i class="fa fa-institution"></i> <span>Sede</span></a></li>
+        <li><a href="~/TipoDocumento/Index"><i class="fa fa-id-card"></i> <span>Tipo de Documento</span></a></li>
+        <li><a href="~/Usuario/Index"><i class="fa fa-user-circle"></i> <span>Usuario</span></a></li>
+    }
+    else
+    {
+        <li><a href="~/RegistrarAsignatura/Index"><i class="fa fa-file-o"></i> <span>Asignar Materias</span></a></li>
+    }
 </ul>
 

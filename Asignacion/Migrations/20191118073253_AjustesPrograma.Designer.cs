@@ -4,14 +4,16 @@ using Asignacion.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Asignacion.Migrations
 {
     [DbContext(typeof(DbContextAsignacion))]
-    partial class DbContextAsignacionModelSnapshot : ModelSnapshot
+    [Migration("20191118073253_AjustesPrograma")]
+    partial class AjustesPrograma
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,43 +1,54 @@
 ﻿@model Asignacion.Entidades.Asignatura
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Asignatura";
 }
 
-<h1>Edit</h1>
+<section class="content-header">
+    <h1>
+        Asignatura
+    </h1>
+</section>
 
-<h4>Asignatura</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+<section class="content container-fluid">
+    <!-- Horizontal Form -->
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Editar Asignatura</h3>
+        </div>
+        <form asp-action="Edit" class="form-horizontal">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="idasignatura" />
-            <div class="form-group">
-                <label asp-for="descripcion" class="control-label"></label>
-                <input asp-for="descripcion" class="form-control" />
-                <span asp-validation-for="descripcion" class="text-danger"></span>
+            <div class="box-body">
+                <div class="form-group">
+                    <label asp-for="descripcion" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <input asp-for="descripcion" class="form-control" />
+                        <span asp-validation-for="descripcion" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="credito" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <input asp-for="credito" class="form-control" />
+                        <span asp-validation-for="credito" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="idmodalidad" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <select asp-for="idmodalidad" class="form-control" asp-items="ViewBag.idmodalidad"></select>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="credito" class="control-label"></label>
-                <input asp-for="credito" class="form-control" />
-                <span asp-validation-for="credito" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="idmodalidad" class="control-label"></label>
-                <input asp-for="idmodalidad" class="form-control" />
-                <span asp-validation-for="idmodalidad" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="box-footer">
+                <a asp-action="Index" class="btn btn-default">Volver</a>
+                <button type="submit" class="btn btn-info pull-right">Guardar</button>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <!-- /.box -->
+</section>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

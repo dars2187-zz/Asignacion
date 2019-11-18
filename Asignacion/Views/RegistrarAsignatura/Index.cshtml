@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "Asignar Materias";
+}
+
+<section class="content-header">
+    <h1>
+        Asignar Materias
+    </h1>
+</section>
+
+<section class="content container-fluid">
+    <!-- Horizontal Form -->
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Crear Asignatura</h3>
+        </div>
+        <div class="box-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Programas</label>
+                <div class="col-sm-10">
+                    <select class="form-control" asp-items="ViewBag.idprograma"></select>
+                </div>
+            </div>
+        </div>
+            <div class="box-footer">
+                <a asp-action="Index" class="btn btn-default">Volver</a>
+                <button type="submit" class="btn btn-info pull-right">Crear</button>
+            </div>
+        </div>
+        <!-- /.box -->
+</section>
+

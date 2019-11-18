@@ -20,7 +20,8 @@ namespace Asignacion.Entidades
         [Display(Name = "Modalidad")]
         public int idmodalidad { get; set; }
 
-        public List<Modalidad> modalidad { get; set; }
+        
+        public Modalidad modalidad { get; set; }
 
         public ICollection<ProgramaAsignatura> programaasignaturas { get; set; }
     }

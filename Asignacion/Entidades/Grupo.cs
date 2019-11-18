@@ -16,14 +16,12 @@ namespace Asignacion.Entidades
         [Display(Name = "Horario")]
         public int idhorario { get; set; }
 
-        public List<Horario> horario { get; set; }
+        public ICollection<Horario> horario { get; set; }
 
         [Required]
         [Display(Name = "Asignatura")]
         public int idasignatura { get; set; }
 
-        public List<GrupoAula> grupoaulas { get; set; }
-
-        public ICollection<Aula> aulas { get; set; }
+        public ICollection<GrupoAula> grupoaulas { get; set; }
     }
 }

@@ -1,18 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Asignacion.Entidades;
+using Asignacion.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Asignacion.Entidades;
-using Asignacion.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Asignacion.Controllers
 {
     public class ProgramaController : Controller
     {
         private readonly DbContextAsignacion _context;
+
+        public int? usu
+        {
+            get => HttpContext.Session.GetInt32("Usuario") as int?;
+            set => HttpContext.Session.SetInt32("Usuario", 0);
+        }
+
+        public int? perf
+        {
+            get => HttpContext.Session.GetInt32("Perfil") as int?;
+            set => HttpContext.Session.SetInt32("Perfil", 0);
+        }
 
         public ProgramaController(DbContextAsignacion context)
         {
@@ -22,31 +33,49 @@ namespace Asignacion.Controllers
         // GET: Programa
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Programas.ToListAsync());
+            if (usu == 1 && perf == 1)
+            {
+                var dbContextAsignacion = _context.Programas.Include(a => a.facultad).Include(a => a.jornada);
+                return View(await dbContextAsignacion.ToListAsync());
+            }
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Programa/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var programa = await _context.Programas
+                    .FirstOrDefaultAsync(m => m.idprograma == id);
+                if (programa == null)
+                {
+                    return NotFound();
+                }
+
+                return View(programa);
             }
 
-            var programa = await _context.Programas
-                .FirstOrDefaultAsync(m => m.idprograma == id);
-            if (programa == null)
-            {
-                return NotFound();
-            }
-
-            return View(programa);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Programa/Create
         public IActionResult Create()
         {
-            return View();
+            if (usu == 1 && perf == 1)
+            {
+                ViewData["idfacultad"] = new SelectList(_context.Facultades, "idfacultad", "descripcion");
+                ViewData["idjornada"] = new SelectList(_context.Facultades, "idjornada", "descripcion");
+                return View();
+            }
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Programa/Create
@@ -56,29 +85,39 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idprograma,descripcion,idfacultad,idjornada")] Programa programa)
         {
-            if (ModelState.IsValid)
+            if (usu == 1 && perf == 1)
             {
-                _context.Add(programa);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(programa);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["idfacultad"] = new SelectList(_context.Facultades, "idfacultad", "descripcion", programa.idfacultad);
+                ViewData["idjornada"] = new SelectList(_context.Facultades, "idjornada", "descripcion", programa.idjornada);
+                return View(programa);
             }
-            return View(programa);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Programa/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var programa = await _context.Programas.FindAsync(id);
-            if (programa == null)
-            {
-                return NotFound();
+                var programa = await _context.Programas.FindAsync(id);
+                if (programa == null)
+                {
+                    return NotFound();
+                }
+                return View(programa);
             }
-            return View(programa);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Programa/Edit/5
@@ -88,50 +127,58 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idprograma,descripcion,idfacultad,idjornada")] Programa programa)
         {
-            if (id != programa.idprograma)
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id != programa.idprograma)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(programa);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProgramaExists(programa.idprograma))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(programa);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ProgramaExists(programa.idprograma))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(programa);
             }
-            return View(programa);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Programa/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var programa = await _context.Programas
-                .FirstOrDefaultAsync(m => m.idprograma == id);
-            if (programa == null)
-            {
-                return NotFound();
-            }
+                var programa = await _context.Programas
+                    .FirstOrDefaultAsync(m => m.idprograma == id);
+                if (programa == null)
+                {
+                    return NotFound();
+                }
 
-            return View(programa);
+                return View(programa);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Programa/Delete/5
@@ -139,10 +186,14 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var programa = await _context.Programas.FindAsync(id);
-            _context.Programas.Remove(programa);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (usu == 1 && perf == 1)
+            {
+                var programa = await _context.Programas.FindAsync(id);
+                _context.Programas.Remove(programa);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         private bool ProgramaExists(int id)

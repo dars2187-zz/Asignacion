@@ -4,14 +4,16 @@ using Asignacion.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Asignacion.Migrations
 {
     [DbContext(typeof(DbContextAsignacion))]
-    partial class DbContextAsignacionModelSnapshot : ModelSnapshot
+    [Migration("20191118013914_AjusteModalidad")]
+    partial class AjusteModalidad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,12 +36,7 @@ namespace Asignacion.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("idmodalidad")
-                        .HasColumnType("int");
-
                     b.HasKey("idasignatura");
-
-                    b.HasIndex("idmodalidad");
 
                     b.ToTable("Asignatura");
                 });
@@ -88,12 +85,17 @@ namespace Asignacion.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("Programaidprograma")
+                        .HasColumnType("int");
+
                     b.Property<string>("descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("idfacultad");
+
+                    b.HasIndex("Programaidprograma");
 
                     b.ToTable("Facultad");
                 });
@@ -153,12 +155,10 @@ namespace Asignacion.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("horafin")
-                        .IsRequired()
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
                     b.Property<string>("horainicio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(5)")
                         .HasMaxLength(5);
 
@@ -181,12 +181,17 @@ namespace Asignacion.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("Programaidprograma")
+                        .HasColumnType("int");
+
                     b.Property<string>("descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("idjornada");
+
+                    b.HasIndex("Programaidprograma");
 
                     b.ToTable("Jornada");
                 });
@@ -203,7 +208,12 @@ namespace Asignacion.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<int>("idasignatura")
+                        .HasColumnType("int");
+
                     b.HasKey("idmodalidad");
+
+                    b.HasIndex("idasignatura");
 
                     b.ToTable("Modalidad");
                 });
@@ -254,10 +264,6 @@ namespace Asignacion.Migrations
                     b.HasKey("idprograma");
 
                     b.HasIndex("Usuarioidusuario");
-
-                    b.HasIndex("idfacultad");
-
-                    b.HasIndex("idjornada");
 
                     b.ToTable("Programa");
                 });
@@ -393,13 +399,11 @@ namespace Asignacion.Migrations
                     b.ToTable("Usuario");
                 });
 
-            modelBuilder.Entity("Asignacion.Entidades.Asignatura", b =>
+            modelBuilder.Entity("Asignacion.Entidades.Facultad", b =>
                 {
-                    b.HasOne("Asignacion.Entidades.Modalidad", "modalidad")
-                        .WithMany("asignatura")
-                        .HasForeignKey("idmodalidad")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Asignacion.Entidades.Programa", null)
+                        .WithMany("facultad")
+                        .HasForeignKey("Programaidprograma");
                 });
 
             modelBuilder.Entity("Asignacion.Entidades.GrupoAula", b =>
@@ -428,23 +432,27 @@ namespace Asignacion.Migrations
                         .HasForeignKey("diasemanaiddiasemana");
                 });
 
+            modelBuilder.Entity("Asignacion.Entidades.Jornada", b =>
+                {
+                    b.HasOne("Asignacion.Entidades.Programa", null)
+                        .WithMany("jornada")
+                        .HasForeignKey("Programaidprograma");
+                });
+
+            modelBuilder.Entity("Asignacion.Entidades.Modalidad", b =>
+                {
+                    b.HasOne("Asignacion.Entidades.Asignatura", "asignatura")
+                        .WithMany("modalidad")
+                        .HasForeignKey("idasignatura")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Asignacion.Entidades.Programa", b =>
                 {
                     b.HasOne("Asignacion.Entidades.Usuario", null)
                         .WithMany("programa")
                         .HasForeignKey("Usuarioidusuario");
-
-                    b.HasOne("Asignacion.Entidades.Facultad", "facultad")
-                        .WithMany("programa")
-                        .HasForeignKey("idfacultad")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Asignacion.Entidades.Jornada", "jornada")
-                        .WithMany("programa")
-                        .HasForeignKey("idjornada")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Asignacion.Entidades.ProgramaAsignatura", b =>

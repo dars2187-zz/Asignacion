@@ -2,6 +2,7 @@
 using Asignacion.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,18 @@ namespace Asignacion.Controllers
     {
         private readonly DbContextAsignacion _context;
 
+        public int? usu
+        {
+            get => HttpContext.Session.GetInt32("Usuario") as int?;
+            set => HttpContext.Session.SetInt32("Usuario", 0);
+        }
+
+        public int? perf
+        {
+            get => HttpContext.Session.GetInt32("Perfil") as int?;
+            set => HttpContext.Session.SetInt32("Perfil", 0);
+        }
+
         public AsignaturaController(DbContextAsignacion context)
         {
             _context = context;
@@ -20,10 +33,11 @@ namespace Asignacion.Controllers
         // GET: Asignatura
         public async Task<IActionResult> Index()
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
-                return View(await _context.Asignaturas.ToListAsync());
+            {
+                var dbContextAsignacion = _context.Asignaturas.Include(a => a.modalidad);
+                return View(await dbContextAsignacion.ToListAsync());
+            }
 
             return View("~/Views/Account/Login.cshtml");
         }
@@ -31,8 +45,6 @@ namespace Asignacion.Controllers
         // GET: Asignatura/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -40,7 +52,7 @@ namespace Asignacion.Controllers
                     return NotFound();
                 }
 
-                var asignatura = await _context.Asignaturas
+                var asignatura = await _context.Asignaturas.Include(a => a.modalidad)
                     .FirstOrDefaultAsync(m => m.idasignatura == id);
                 if (asignatura == null)
                 {
@@ -55,10 +67,11 @@ namespace Asignacion.Controllers
         // GET: Asignatura/Create
         public IActionResult Create()
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
+            {
+                ViewData["idmodalidad"] = new SelectList(_context.Modalidades, "idmodalidad", "descripcion");
                 return View();
+            }                
 
             return View("~/Views/Account/Login.cshtml");
         }
@@ -70,8 +83,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idasignatura,descripcion,credito,idmodalidad")] Asignatura asignatura)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (ModelState.IsValid)
@@ -80,6 +91,7 @@ namespace Asignacion.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
+                ViewData["idmodalidad"] = new SelectList(_context.Modalidades, "idmodalidad", "descripcion", asignatura.idmodalidad);
                 return View(asignatura);
             }
             return View("~/Views/Account/Login.cshtml");
@@ -88,8 +100,6 @@ namespace Asignacion.Controllers
         // GET: Asignatura/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -102,6 +112,7 @@ namespace Asignacion.Controllers
                 {
                     return NotFound();
                 }
+                ViewData["idmodalidad"] = new SelectList(_context.Modalidades, "idmodalidad", "descripcion");
                 return View(asignatura);
             }
             return View("~/Views/Account/Login.cshtml");
@@ -114,8 +125,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idasignatura,descripcion,credito,idmodalidad")] Asignatura asignatura)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id != asignatura.idasignatura)
@@ -141,6 +150,7 @@ namespace Asignacion.Controllers
                             throw;
                         }
                     }
+                    ViewData["idmodalidad"] = new SelectList(_context.Modalidades, "idmodalidad", "descripcion", asignatura.idmodalidad);
                     return RedirectToAction(nameof(Index));
                 }
                 return View(asignatura);
@@ -151,8 +161,6 @@ namespace Asignacion.Controllers
         // GET: Asignatura/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -160,7 +168,7 @@ namespace Asignacion.Controllers
                     return NotFound();
                 }
 
-                var asignatura = await _context.Asignaturas
+                var asignatura = await _context.Asignaturas.Include(a => a.modalidad)
                     .FirstOrDefaultAsync(m => m.idasignatura == id);
                 if (asignatura == null)
                 {
@@ -177,8 +185,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 var asignatura = await _context.Asignaturas.FindAsync(id);

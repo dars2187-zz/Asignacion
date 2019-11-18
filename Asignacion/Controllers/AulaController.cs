@@ -12,6 +12,17 @@ namespace Asignacion.Controllers
     {
         private readonly DbContextAsignacion _context;
 
+        public int? usu
+        {
+            get => HttpContext.Session.GetInt32("Usuario") as int?;
+            set => HttpContext.Session.SetInt32("Usuario", 0);
+        }
+
+        public int? perf
+        {
+            get => HttpContext.Session.GetInt32("Perfil") as int?;
+            set => HttpContext.Session.SetInt32("Perfil", 0);
+        }
         public AulaController(DbContextAsignacion context)
         {
             _context = context;
@@ -20,8 +31,6 @@ namespace Asignacion.Controllers
         // GET: Aula
         public async Task<IActionResult> Index()
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
                 return View(await _context.Aulas.ToListAsync());
 
@@ -31,8 +40,6 @@ namespace Asignacion.Controllers
         // GET: Aula/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -55,8 +62,6 @@ namespace Asignacion.Controllers
         // GET: Aula/Create
         public IActionResult Create()
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
                 return View();
 
@@ -70,8 +75,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idaula,numaula,idsede")] Aula aula)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (ModelState.IsValid)
@@ -88,8 +91,6 @@ namespace Asignacion.Controllers
         // GET: Aula/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -114,8 +115,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idaula,numaula,idsede")] Aula aula)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id != aula.idaula)
@@ -151,8 +150,6 @@ namespace Asignacion.Controllers
         // GET: Aula/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -177,8 +174,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 var aula = await _context.Aulas.FindAsync(id);
