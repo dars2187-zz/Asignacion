@@ -1,18 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Asignacion.Entidades;
+using Asignacion.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Asignacion.Entidades;
-using Asignacion.Models;
 
 namespace Asignacion.Controllers
 {
     public class JornadaController : Controller
     {
         private readonly DbContextAsignacion _context;
+
+        public int? usu
+        {
+            get => HttpContext.Session.GetInt32("Usuario") as int?;
+            set => HttpContext.Session.SetInt32("Usuario", 0);
+        }
+
+        public int? perf
+        {
+            get => HttpContext.Session.GetInt32("Perfil") as int?;
+            set => HttpContext.Session.SetInt32("Perfil", 0);
+        }
 
         public JornadaController(DbContextAsignacion context)
         {
@@ -22,31 +32,41 @@ namespace Asignacion.Controllers
         // GET: Jornada
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Jornadas.ToListAsync());
+            if (usu == 1 && perf == 1)
+                return View(await _context.Jornadas.ToListAsync());
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Jornada/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var jornada = await _context.Jornadas
-                .FirstOrDefaultAsync(m => m.idjornada == id);
-            if (jornada == null)
-            {
-                return NotFound();
-            }
+                var jornada = await _context.Jornadas
+                    .FirstOrDefaultAsync(m => m.idjornada == id);
+                if (jornada == null)
+                {
+                    return NotFound();
+                }
 
-            return View(jornada);
+                return View(jornada);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Jornada/Create
         public IActionResult Create()
         {
-            return View();
+            if (usu == 1 && perf == 1)
+                return View();
+
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Jornada/Create
@@ -56,29 +76,37 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idjornada,descripcion")] Jornada jornada)
         {
-            if (ModelState.IsValid)
+            if (usu == 1 && perf == 1)
             {
-                _context.Add(jornada);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    _context.Add(jornada);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(jornada);
             }
-            return View(jornada);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Jornada/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var jornada = await _context.Jornadas.FindAsync(id);
-            if (jornada == null)
-            {
-                return NotFound();
+                var jornada = await _context.Jornadas.FindAsync(id);
+                if (jornada == null)
+                {
+                    return NotFound();
+                }
+                return View(jornada);
             }
-            return View(jornada);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Jornada/Edit/5
@@ -88,50 +116,58 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idjornada,descripcion")] Jornada jornada)
         {
-            if (id != jornada.idjornada)
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id != jornada.idjornada)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(jornada);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!JornadaExists(jornada.idjornada))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(jornada);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!JornadaExists(jornada.idjornada))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+                return View(jornada);
             }
-            return View(jornada);
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // GET: Jornada/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (usu == 1 && perf == 1)
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var jornada = await _context.Jornadas
-                .FirstOrDefaultAsync(m => m.idjornada == id);
-            if (jornada == null)
-            {
-                return NotFound();
-            }
+                var jornada = await _context.Jornadas
+                    .FirstOrDefaultAsync(m => m.idjornada == id);
+                if (jornada == null)
+                {
+                    return NotFound();
+                }
 
-            return View(jornada);
+                return View(jornada);
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         // POST: Jornada/Delete/5
@@ -139,10 +175,14 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var jornada = await _context.Jornadas.FindAsync(id);
-            _context.Jornadas.Remove(jornada);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (usu == 1 && perf == 1)
+            {
+                var jornada = await _context.Jornadas.FindAsync(id);
+                _context.Jornadas.Remove(jornada);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View("~/Views/Account/Login.cshtml");
         }
 
         private bool JornadaExists(int id)

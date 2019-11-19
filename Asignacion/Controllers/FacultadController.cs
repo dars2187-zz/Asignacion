@@ -12,6 +12,18 @@ namespace Asignacion.Controllers
     {
         private readonly DbContextAsignacion _context;
 
+        public int? usu
+        {
+            get => HttpContext.Session.GetInt32("Usuario") as int?;
+            set => HttpContext.Session.SetInt32("Usuario", 0);
+        }
+
+        public int? perf
+        {
+            get => HttpContext.Session.GetInt32("Perfil") as int?;
+            set => HttpContext.Session.SetInt32("Perfil", 0);
+        }
+
         public FacultadController(DbContextAsignacion context)
         {
             _context = context;
@@ -20,8 +32,6 @@ namespace Asignacion.Controllers
         // GET: Facultad
         public async Task<IActionResult> Index()
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
                 return View(await _context.Facultades.ToListAsync());
 
@@ -31,8 +41,6 @@ namespace Asignacion.Controllers
         // GET: Facultad/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -55,8 +63,6 @@ namespace Asignacion.Controllers
         // GET: Facultad/Create
         public IActionResult Create()
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
                 return View();
 
@@ -70,8 +76,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("idfacultad,descripcion")] Facultad facultad)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (ModelState.IsValid)
@@ -88,8 +92,6 @@ namespace Asignacion.Controllers
         // GET: Facultad/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -114,8 +116,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("idfacultad,descripcion")] Facultad facultad)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id != facultad.idfacultad)
@@ -151,8 +151,6 @@ namespace Asignacion.Controllers
         // GET: Facultad/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 if (id == null)
@@ -177,8 +175,6 @@ namespace Asignacion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var usu = HttpContext.Session.GetInt32("Usuario");
-            var perf = HttpContext.Session.GetInt32("Perfil");
             if (usu == 1 && perf == 1)
             {
                 var facultad = await _context.Facultades.FindAsync(id);

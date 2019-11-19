@@ -53,6 +53,8 @@ namespace Asignacion.Controllers
                 }
 
                 var programa = await _context.Programas
+                    .Include(a => a.facultad)
+                    .Include(a => a.jornada)
                     .FirstOrDefaultAsync(m => m.idprograma == id);
                 if (programa == null)
                 {
@@ -71,7 +73,7 @@ namespace Asignacion.Controllers
             if (usu == 1 && perf == 1)
             {
                 ViewData["idfacultad"] = new SelectList(_context.Facultades, "idfacultad", "descripcion");
-                ViewData["idjornada"] = new SelectList(_context.Facultades, "idjornada", "descripcion");
+                ViewData["idjornada"] = new SelectList(_context.Jornadas, "idjornada", "descripcion");
                 return View();
             }
 
@@ -94,7 +96,7 @@ namespace Asignacion.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["idfacultad"] = new SelectList(_context.Facultades, "idfacultad", "descripcion", programa.idfacultad);
-                ViewData["idjornada"] = new SelectList(_context.Facultades, "idjornada", "descripcion", programa.idjornada);
+                ViewData["idjornada"] = new SelectList(_context.Jornadas, "idjornada", "descripcion", programa.idjornada);
                 return View(programa);
             }
             return View("~/Views/Account/Login.cshtml");
@@ -115,6 +117,8 @@ namespace Asignacion.Controllers
                 {
                     return NotFound();
                 }
+                ViewData["idfacultad"] = new SelectList(_context.Facultades, "idfacultad", "descripcion");
+                ViewData["idjornada"] = new SelectList(_context.Jornadas, "idjornada", "descripcion");
                 return View(programa);
             }
             return View("~/Views/Account/Login.cshtml");
@@ -154,6 +158,8 @@ namespace Asignacion.Controllers
                     }
                     return RedirectToAction(nameof(Index));
                 }
+                ViewData["idfacultad"] = new SelectList(_context.Facultades, "idfacultad", "descripcion", programa.idfacultad);
+                ViewData["idjornada"] = new SelectList(_context.Jornadas, "idjornada", "descripcion", programa.idjornada);
                 return View(programa);
             }
             return View("~/Views/Account/Login.cshtml");
@@ -170,6 +176,8 @@ namespace Asignacion.Controllers
                 }
 
                 var programa = await _context.Programas
+                    .Include(a => a.facultad)
+                    .Include(a => a.jornada)
                     .FirstOrDefaultAsync(m => m.idprograma == id);
                 if (programa == null)
                 {

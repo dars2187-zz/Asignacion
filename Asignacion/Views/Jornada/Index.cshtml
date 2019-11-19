@@ -1,35 +1,98 @@
 ﻿@model IEnumerable<Asignacion.Entidades.Jornada>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Jornadas";
 }
 
-<h1>Index</h1>
+<section class="content-header">
+    <h1>
+        Jornadas
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Jornadas</li>
+    </ol>
+    <p>
+        <a asp-action="Create">Crear Nueva Jornada</a>
+    </p>
+</section>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.descripcion)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.descripcion)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.idjornada">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.idjornada">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.idjornada">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Administrar Jornadas</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="tablejornada" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.descripcion)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.descripcion)
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@item.idjornada">Editar</a> |
+                                        <a asp-action="Details" asp-route-id="@item.idjornada">Detalle</a> |
+                                        <a asp-action="Delete" asp-route-id="@item.idjornada">Eliminar</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+<script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+    $(function () {
+        $('#tablejornada').DataTable({
+            "oLanguage": {
+                "sSearch": "Buscar",
+                "sZeroRecords": "No se encontraron resultados",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sInfo": "Registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing": "Procesando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+            },
+            "bFilter": true,
+            "bProcessing": true,
+            "bserverSide": true,
+            "aaSorting": [0, "desc"],
+            "lengthMenu": [[25, 50, 100, 200], [25, 50, 100, 200]],
+            'columnDefs': [{
+                'targets': 1,
+                'searchable': false,
+                'orderable': false
+            }],
+        });
+    });
+</script>

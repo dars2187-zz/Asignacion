@@ -19,15 +19,84 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">Programas</label>
                 <div class="col-sm-10">
-                    <select class="form-control" asp-items="ViewBag.idprograma"></select>
+                    <select class="form-control" asp-items="ViewBag.idprograma" id="programas"></select>
                 </div>
             </div>
-        </div>
-            <div class="box-footer">
-                <a asp-action="Index" class="btn btn-default">Volver</a>
-                <button type="submit" class="btn btn-info pull-right">Crear</button>
+            <div class="form-group">
+                <table style="display:none;" id="tableasignatura" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="example-select-all" onclick="select_checkbox();" /></th>
+                            <th>Asignatura</th>
+                            <th>Créditos</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
         </div>
-        <!-- /.box -->
+        <div class="box-footer">
+            <a asp-action="Index" class="btn btn-default">Volver</a>
+            <button type="submit" class="btn btn-info pull-right">Crear</button>
+        </div>
+    </div>
+    <!-- /.box -->
 </section>
+
+<script src="~/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="~/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+
+<script>
+    $("#programas").change(function () {
+        alert("Prueba");
+        table = $('#tableasignatura').DataTable({
+            destroy: true,
+            "ajax": {
+                "url": "/PermisosOficiales/ObtenerEmpleadoPermiso/?niveles=" + res[1],
+                "type": "GET",
+                "datatype": "json"
+            },
+            "oLanguage": {
+                "sSearch": "Buscar",
+                "sZeroRecords": "No se encontraron resultados",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sInfo": "Registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sLoadingRecords": "Cargando...",
+                "sProcessing": "Procesando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+            },
+            "columns": [
+                { "data": "contrato_id", "autoWidth": true },
+                { "data": "nombre", "autoWidth": true },
+                { "data": "apellido", "autoWidth": true },
+                { "data": "identificacion", "autoWidth": true },
+                { "data": "nivel1", "autoWidth": true },
+                { "data": "nivel2", "autoWidth": true },
+                { "data": "nivel3", "autoWidth": true },
+                { "data": "nivel4", "autoWidth": true },
+                { "data": "nivel5", "autoWidth": true },
+                { "data": "nivel6", "autoWidth": true },
+                { "data": "turno", "autoWidth": true },
+            ],
+            'columnDefs': [{
+                'targets': 0,
+                'searchable': false,
+                'orderable': false,
+                'className': 'dt-body-center',
+                'render': function (data, type, full, meta) {
+                    return '<input type="checkbox" name="id[]" value="' + $('<div/>').text(data).html() + '">';
+                }
+            }],
+        });
+        $('#tablepersonalPermiso').hide();
+        $('#tablepersonalPermiso').toggle();
+    });
+</script>
 

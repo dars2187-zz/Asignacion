@@ -52,7 +52,8 @@ namespace Asignacion.Controllers
                     return NotFound();
                 }
 
-                var asignatura = await _context.Asignaturas.Include(a => a.modalidad)
+                var asignatura = await _context.Asignaturas
+                    .Include(a => a.modalidad)
                     .FirstOrDefaultAsync(m => m.idasignatura == id);
                 if (asignatura == null)
                 {
@@ -168,7 +169,8 @@ namespace Asignacion.Controllers
                     return NotFound();
                 }
 
-                var asignatura = await _context.Asignaturas.Include(a => a.modalidad)
+                var asignatura = await _context.Asignaturas
+                    .Include(a => a.modalidad)
                     .FirstOrDefaultAsync(m => m.idasignatura == id);
                 if (asignatura == null)
                 {
